@@ -26,6 +26,7 @@ resource "aws_subnet" "hashicat" {
 
 resource "aws_instance" "hashicat" {
   ami                         = var.ami
+  key_name                    = aws_key_pair.hashicat.key_name
   instance_type               = var.hello_tf_instance_type
   subnet_id                   = aws_subnet.hashicat.id
   associate_public_ip_address = true
@@ -40,6 +41,13 @@ resource "aws_security_group" "hashicat" {
   ingress {
     from_port   = 22
     to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
